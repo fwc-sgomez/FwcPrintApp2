@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Text;
+using ImageMagick;
 
 namespace FwcPrintApp
 {
@@ -9,9 +11,31 @@ namespace FwcPrintApp
     {
         Image printImg;
 
-        public void WebpToSomethingLol()
+        public void Base64ToWebp(string base64Data)
         {
+            byte[] imgBytes = Convert.FromBase64String(base64Data);
 
+            using(var mImg = new MagickImage(imgBytes))
+            {
+                mImg.Format = MagickFormat.WebP;
+                mImg.Quality = 100;
+                printImg = WebpToBitmap(mImg);
+            }
+        }
+
+        private Bitmap WebpToBitmap(MagickImage webpImg)
+        {
+            Bitmap bm;
+            using (var mImg = new MagickImage(webpImg))
+            {
+                using (MemoryStream ms = new MemoryStream()) 
+                {
+                    mImg.Format = MagickFormat.Bmp;
+                    mImg.Write(ms);
+                    bm = new Bitmap(ms);
+                }
+            }
+            return bm;
         }
         public void ImageFromBase64(string imageData)
         {
@@ -23,19 +47,23 @@ namespace FwcPrintApp
             else
             {
                 string imgBase64 = imgWHeader[1];
-                byte[] bytes = Convert.FromBase64String(imgBase64);
+                Base64ToWebp(imgBase64);
+                //return;
+                //byte[] bytes = Convert.FromBase64String(imgBase64);
 
-                using (MemoryStream ms = new MemoryStream(bytes))
-                {
-                    printImg = Image.FromStream(ms);
-                }
+                //using (MemoryStream ms = new MemoryStream(bytes))
+                //{
+                //    printImg = Image.FromStream(ms);
+                //}
 
                 // TESTING vvv PROBABLY NOT GOOD
                 // pp stands for PostProcess........
                 Size ppSize = new Size(printImg.Width, printImg.Height);
-                printImg = ScaleImageForPreview(printImg, ppSize);
-
                 Size previewSize = new Size(pictureBoxImage.Width, pictureBoxImage.Height);
+                Size test = new Size(1130, 600);
+                Image pi = ScaleImageForPreview(printImg, test);
+                printImg = pi;
+
                 pictureBoxImage.Image = ScaleImageForPreview(printImg, previewSize);
                 killWs();
             }
@@ -59,7 +87,10 @@ namespace FwcPrintApp
             int destHeight = (int)(sourceHeight * nPercent);
             Bitmap b = new Bitmap(destWidth, destHeight);
             Graphics g = Graphics.FromImage(b);
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            //g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             // Draw image with new width and height
             g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
             g.Dispose();

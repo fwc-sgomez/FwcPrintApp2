@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Reflection;
 
 /*
@@ -66,8 +67,11 @@ namespace FwcPrintApp
         private void buttonPrint_Click(object sender, EventArgs e)
         {
             printDocument.PrintPage += (sender, e) => { 
-                Point p = new(0, 0);
-                e.Graphics.DrawImage(printImg, p);
+                Point p = new(-10, 0);
+                Rectangle r = e.PageBounds;
+                r.Location = new Point(-15, -5);
+                e.Graphics.DrawImage(printImg, r);
+                //e.Graphics.DrawImage(printImg, p);
             };
             printDocument.PrinterSettings.Copies = (short)numericCopies.Value;
             printDocument.DefaultPageSettings.Landscape = true;
@@ -75,6 +79,11 @@ namespace FwcPrintApp
                 MessageBox.Show("Done printing!");
                 this.Close();
             };
+            //foreach (PrinterResolution res in printDocument.PrinterSettings.PrinterResolutions)
+            //{
+            //    string pr = $"x: {res.X}; y: {res.Y}";
+            //    MessageBox.Show(pr);
+            //}
             printDocument.Print();
         }
     }

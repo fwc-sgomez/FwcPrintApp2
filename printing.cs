@@ -109,7 +109,7 @@ namespace FwcPrintApp
                 {
                     comboBoxPaperSize.Invoke(cb => cb.SelectedIndex = idx);
                     activePaperSize = paperSize;
-                } else if (paperSize.PaperName.Contains("Letter") && !usingSelected)
+                } else if (paperSize.PaperName.Contains("99014") && !usingSelected)
                 {
                     comboBoxPaperSize.Invoke(cb => cb.SelectedIndex = idx);
                     activePaperSize = paperSize;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             buttonPrint = new Button();
@@ -141,6 +142,7 @@
             // 
             // pictureBoxImage
             // 
+            pictureBoxImage.BorderStyle = BorderStyle.FixedSingle;
             pictureBoxImage.Location = new Point(85, 23);
             pictureBoxImage.Name = "pictureBoxImage";
             pictureBoxImage.Size = new Size(384, 204);
@@ -240,6 +242,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 361);
             Controls.Add(tabControl1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
