@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Text;
+﻿using System.Drawing.Drawing2D;
 using ImageMagick;
 
 namespace FwcPrintApp

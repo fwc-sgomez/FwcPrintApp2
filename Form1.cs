@@ -11,7 +11,6 @@ namespace FwcPrintApp
 {
     public partial class Form1 : Form
     {
-        CancellationTokenSource cts = new CancellationTokenSource();
         public Form1()
         {
             InitializeComponent();
@@ -23,18 +22,6 @@ namespace FwcPrintApp
 
             Thread threadWs = new Thread(StartWsServer);
             threadWs.Start();
-
-        }
-
-
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //msgOk(tabControl1.SelectedIndex.ToString());
-            if (tabControl1.SelectedIndex == 0)
-            {
-                //Thread threadPrint = new Thread();
-            }
         }
 
         private void comboBoxPrinters_SelectedIndexChanged(object sender, EventArgs e)
@@ -67,7 +54,6 @@ namespace FwcPrintApp
         private void buttonPrint_Click(object sender, EventArgs e)
         {
             printDocument.PrintPage += (sender, e) => { 
-                Point p = new(-10, 0);
                 Rectangle r = e.PageBounds;
                 r.Location = new Point(-15, -5);
                 e.Graphics.DrawImage(printImg, r);
@@ -79,11 +65,7 @@ namespace FwcPrintApp
                 MessageBox.Show("Done printing!");
                 this.Close();
             };
-            //foreach (PrinterResolution res in printDocument.PrinterSettings.PrinterResolutions)
-            //{
-            //    string pr = $"x: {res.X}; y: {res.Y}";
-            //    MessageBox.Show(pr);
-            //}
+
             printDocument.Print();
         }
     }

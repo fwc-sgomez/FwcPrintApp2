@@ -16,7 +16,6 @@ namespace FwcPrintApp
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Classes\\" + protocolName);
             string appPath = Process.GetCurrentProcess().MainModule.FileName;
-            Console.WriteLine(key);
             if ((key == null) || force)
             {
                 key = Registry.CurrentUser.CreateSubKey("Software\\Classes\\" + protocolName);
