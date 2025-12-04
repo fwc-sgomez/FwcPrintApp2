@@ -31,10 +31,20 @@ namespace FwcPrintApp
             int port = 21845;
             server = new TcpListener(IPAddress.Parse(ip), port);
             server.Start();
+            try
+            {
+                client = server.AcceptTcpClient();
 
-            client = server.AcceptTcpClient();
+                stream = client.GetStream();
+            } catch {
+                /*
+                 * the meaning of life isn't as clear as the contrast between black and white.
+                 * we're set on earth for many reasons. some more important than others.
+                 * for some, it's helping others. for others, it's it's helping themselves.
+                 * as for me? it's killing threads victorian style but in 2025 where Thread.Abort() isn't allowed.
+                 */
+            }
 
-            stream = client.GetStream();
 
             // enter to an infinite cycle to be able to handle every change in stream
             // I don't really like how much cpu this takes. need to either optimize or end thread once image is recieved...
@@ -47,8 +57,7 @@ namespace FwcPrintApp
         public void killWs()
         {
             runWs = false;
-            //client.Close();
-            //server.Stop();
+            server.Stop();
         }
 
         private void handleWs()

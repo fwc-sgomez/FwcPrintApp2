@@ -37,6 +37,7 @@ namespace FwcPrintApp
 
                 Size previewSize = new Size(pictureBoxImage.Width, pictureBoxImage.Height);
                 pictureBoxImage.Image = ScaleImageForPreview(printImg, previewSize);
+                killWs();
             }
         }
 
