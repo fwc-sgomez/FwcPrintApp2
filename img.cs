@@ -60,12 +60,12 @@ namespace FwcPrintApp
             int sourceWidth = imgToResize.Width;
             // Get the image current height
             int sourceHeight = imgToResize.Height;
-            float nPercent = 0;
-            float nPercentW = 0;
-            float nPercentH = 0;
+            double nPercent = 0;
+            double nPercentW = 0;
+            double nPercentH = 0;
             // Calculate width and height with new desired size
-            nPercentW = ((float)resize.Width / (float)sourceWidth);
-            nPercentH = ((float)resize.Height / (float)sourceHeight);
+            nPercentW = (resize.Width / sourceWidth);
+            nPercentH = (resize.Height / sourceHeight);
             nPercent = Math.Min(nPercentW, nPercentH);
             // New Width and Height
             int destWidth = (int)(sourceWidth * nPercent);
