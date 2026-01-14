@@ -38,7 +38,7 @@ namespace FwcPrintApp
             string[] imgWHeader = imageData.Split(',');
             if (imgWHeader.Length < 2)
             {
-                MessageBox.Show("failed to parse image data");
+                MessageBox.Show("failed to parse image data", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -83,7 +83,7 @@ namespace FwcPrintApp
             int destHeight = (int)(sourceHeight * nPercent);
             Bitmap b = new Bitmap(destWidth, destHeight);
             Graphics g = Graphics.FromImage(b);
-            //g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             //g.InterpolationMode = InterpolationMode.HighQualityBicubic;

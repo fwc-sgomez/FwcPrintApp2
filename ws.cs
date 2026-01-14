@@ -57,6 +57,7 @@ namespace FwcPrintApp
         public void killWs()
         {
             runWs = false;
+            wsTimeout.Stop();
             server.Stop();
         }
 
@@ -126,7 +127,7 @@ namespace FwcPrintApp
 
             if (msgLen == 0)
             {
-                MessageBox.Show("msgLen == 0");
+                MessageBox.Show("something happened...", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (mask)
             {
@@ -142,7 +143,8 @@ namespace FwcPrintApp
             }
             else
             {
-                MessageBox.Show("mask bit not set");
+                // mask bit not set
+                MessageBox.Show("Recieve error...", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

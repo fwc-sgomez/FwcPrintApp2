@@ -58,5 +58,29 @@ namespace FwcPrintApp.Properties {
                 this["isSystemPrinter"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool allowEnterPrint {
+            get {
+                return ((bool)(this["allowEnterPrint"]));
+            }
+            set {
+                this["allowEnterPrint"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool wsTimeout {
+            get {
+                return ((bool)(this["wsTimeout"]));
+            }
+            set {
+                this["wsTimeout"] = value;
+            }
+        }
     }
 }

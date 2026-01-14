@@ -23,9 +23,16 @@ namespace FwcPrintApp
         public void PopulatePrintersList()
         {
             comboBoxPrinters.Items.Clear();
-            foreach (string printer in PrinterSettings.InstalledPrinters)
+
+            if (PrinterSettings.InstalledPrinters.Count > 0 )
             {
-                comboBoxPrinters.Items.Add(printer);
+                foreach (string printer in PrinterSettings.InstalledPrinters)
+                {
+                    comboBoxPrinters.Items.Add(printer);
+                }
+            } else
+            {
+                MessageBox.Show("No printers installed!", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             LoadDefaultPrinter();
@@ -37,7 +44,7 @@ namespace FwcPrintApp
             {
                 // use system default printer
                 printerName = new PrinterSettings().PrinterName;
-                MessageBox.Show("Please select a printer!");
+                MessageBox.Show("Please select a printer in the Settings tab.", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
 
             int idx = 0;

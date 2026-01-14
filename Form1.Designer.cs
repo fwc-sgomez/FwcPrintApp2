@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
@@ -39,20 +40,29 @@
             groupBox1 = new GroupBox();
             pictureBoxImage = new PictureBox();
             tabPage2 = new TabPage();
-            buttonReregisterProtocol = new Button();
-            labelVersion = new Label();
-            buttonReset = new Button();
-            comboBoxPaperSize = new ComboBox();
-            label4 = new Label();
+            groupBox4 = new GroupBox();
+            checkBoxAllowEnterPrint = new CheckBox();
+            groupBox3 = new GroupBox();
             comboBoxPrinters = new ComboBox();
             label3 = new Label();
+            label4 = new Label();
+            comboBoxPaperSize = new ComboBox();
+            groupBoxDbg = new GroupBox();
+            checkBoxWsTimeout = new CheckBox();
+            buttonReset = new Button();
+            buttonReregisterProtocol = new Button();
+            labelVersion = new Label();
             printDocument = new System.Drawing.Printing.PrintDocument();
+            wsTimeout = new System.Windows.Forms.Timer(components);
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericCopies).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxImage).BeginInit();
             tabPage2.SuspendLayout();
+            groupBox4.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBoxDbg.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -150,13 +160,10 @@
             // 
             // tabPage2
             // 
-            tabPage2.Controls.Add(buttonReregisterProtocol);
+            tabPage2.Controls.Add(groupBox4);
+            tabPage2.Controls.Add(groupBox3);
+            tabPage2.Controls.Add(groupBoxDbg);
             tabPage2.Controls.Add(labelVersion);
-            tabPage2.Controls.Add(buttonReset);
-            tabPage2.Controls.Add(comboBoxPaperSize);
-            tabPage2.Controls.Add(label4);
-            tabPage2.Controls.Add(comboBoxPrinters);
-            tabPage2.Controls.Add(label3);
             tabPage2.Location = new Point(4, 30);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
@@ -165,9 +172,122 @@
             tabPage2.Text = "Settings";
             tabPage2.UseVisualStyleBackColor = true;
             // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(checkBoxAllowEnterPrint);
+            groupBox4.Location = new Point(6, 100);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(560, 156);
+            groupBox4.TabIndex = 10;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "App Settings";
+            // 
+            // checkBoxAllowEnterPrint
+            // 
+            checkBoxAllowEnterPrint.AutoSize = true;
+            checkBoxAllowEnterPrint.Checked = true;
+            checkBoxAllowEnterPrint.CheckState = CheckState.Checked;
+            checkBoxAllowEnterPrint.Location = new Point(6, 22);
+            checkBoxAllowEnterPrint.Name = "checkBoxAllowEnterPrint";
+            checkBoxAllowEnterPrint.Size = new Size(148, 19);
+            checkBoxAllowEnterPrint.TabIndex = 8;
+            checkBoxAllowEnterPrint.Text = "Use \"Enter\" key to print";
+            checkBoxAllowEnterPrint.UseVisualStyleBackColor = true;
+            checkBoxAllowEnterPrint.CheckedChanged += checkBoxAllowEnterPrint_CheckedChanged;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(comboBoxPrinters);
+            groupBox3.Controls.Add(label3);
+            groupBox3.Controls.Add(label4);
+            groupBox3.Controls.Add(comboBoxPaperSize);
+            groupBox3.Location = new Point(6, 6);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(560, 88);
+            groupBox3.TabIndex = 9;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Printing Settings";
+            // 
+            // comboBoxPrinters
+            // 
+            comboBoxPrinters.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxPrinters.FormattingEnabled = true;
+            comboBoxPrinters.Items.AddRange(new object[] { "Populating list, please wait..." });
+            comboBoxPrinters.Location = new Point(71, 25);
+            comboBoxPrinters.Name = "comboBoxPrinters";
+            comboBoxPrinters.Size = new Size(273, 23);
+            comboBoxPrinters.TabIndex = 1;
+            comboBoxPrinters.SelectedIndexChanged += comboBoxPrinters_SelectedIndexChanged;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(20, 28);
+            label3.Name = "label3";
+            label3.Size = new Size(45, 15);
+            label3.TabIndex = 0;
+            label3.Text = "Printer:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(3, 57);
+            label4.Name = "label4";
+            label4.Size = new Size(62, 15);
+            label4.TabIndex = 2;
+            label4.Text = "Paper size:";
+            // 
+            // comboBoxPaperSize
+            // 
+            comboBoxPaperSize.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxPaperSize.FormattingEnabled = true;
+            comboBoxPaperSize.Items.AddRange(new object[] { "Populating list, please wait..." });
+            comboBoxPaperSize.Location = new Point(71, 54);
+            comboBoxPaperSize.Name = "comboBoxPaperSize";
+            comboBoxPaperSize.Size = new Size(273, 23);
+            comboBoxPaperSize.TabIndex = 3;
+            comboBoxPaperSize.SelectedIndexChanged += comboBoxPaperSize_SelectedIndexChanged;
+            // 
+            // groupBoxDbg
+            // 
+            groupBoxDbg.Controls.Add(checkBoxWsTimeout);
+            groupBoxDbg.Controls.Add(buttonReset);
+            groupBoxDbg.Controls.Add(buttonReregisterProtocol);
+            groupBoxDbg.Location = new Point(6, 262);
+            groupBoxDbg.Name = "groupBoxDbg";
+            groupBoxDbg.Size = new Size(428, 55);
+            groupBoxDbg.TabIndex = 7;
+            groupBoxDbg.TabStop = false;
+            groupBoxDbg.Text = "Debugging";
+            groupBoxDbg.Visible = false;
+            // 
+            // checkBoxWsTimeout
+            // 
+            checkBoxWsTimeout.AutoSize = true;
+            checkBoxWsTimeout.Checked = true;
+            checkBoxWsTimeout.CheckState = CheckState.Checked;
+            checkBoxWsTimeout.Location = new Point(275, 25);
+            checkBoxWsTimeout.Name = "checkBoxWsTimeout";
+            checkBoxWsTimeout.Size = new Size(87, 19);
+            checkBoxWsTimeout.TabIndex = 7;
+            checkBoxWsTimeout.Text = "WsTimeout";
+            checkBoxWsTimeout.UseVisualStyleBackColor = true;
+            checkBoxWsTimeout.CheckedChanged += checkBoxWsTimeout_CheckedChanged;
+            // 
+            // buttonReset
+            // 
+            buttonReset.ForeColor = Color.Red;
+            buttonReset.Location = new Point(6, 22);
+            buttonReset.Name = "buttonReset";
+            buttonReset.Size = new Size(143, 23);
+            buttonReset.TabIndex = 4;
+            buttonReset.Text = "Reset settings and close";
+            buttonReset.UseVisualStyleBackColor = true;
+            buttonReset.Click += buttonReset_Click;
+            // 
             // buttonReregisterProtocol
             // 
-            buttonReregisterProtocol.Location = new Point(155, 294);
+            buttonReregisterProtocol.Location = new Point(155, 21);
             buttonReregisterProtocol.Name = "buttonReregisterProtocol";
             buttonReregisterProtocol.Size = new Size(114, 23);
             buttonReregisterProtocol.TabIndex = 6;
@@ -183,57 +303,12 @@
             labelVersion.Size = new Size(45, 15);
             labelVersion.TabIndex = 5;
             labelVersion.Text = "version";
+            labelVersion.Click += labelVersion_Click;
             // 
-            // buttonReset
+            // wsTimeout
             // 
-            buttonReset.ForeColor = Color.Red;
-            buttonReset.Location = new Point(6, 295);
-            buttonReset.Name = "buttonReset";
-            buttonReset.Size = new Size(143, 23);
-            buttonReset.TabIndex = 4;
-            buttonReset.Text = "Reset settings and close";
-            buttonReset.UseVisualStyleBackColor = true;
-            buttonReset.Click += buttonReset_Click;
-            // 
-            // comboBoxPaperSize
-            // 
-            comboBoxPaperSize.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPaperSize.FormattingEnabled = true;
-            comboBoxPaperSize.Items.AddRange(new object[] { "Populating list, please wait..." });
-            comboBoxPaperSize.Location = new Point(174, 71);
-            comboBoxPaperSize.Name = "comboBoxPaperSize";
-            comboBoxPaperSize.Size = new Size(273, 23);
-            comboBoxPaperSize.TabIndex = 3;
-            comboBoxPaperSize.SelectedIndexChanged += comboBoxPaperSize_SelectedIndexChanged;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(106, 74);
-            label4.Name = "label4";
-            label4.Size = new Size(62, 15);
-            label4.TabIndex = 2;
-            label4.Text = "Paper size:";
-            // 
-            // comboBoxPrinters
-            // 
-            comboBoxPrinters.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxPrinters.FormattingEnabled = true;
-            comboBoxPrinters.Items.AddRange(new object[] { "Populating list, please wait..." });
-            comboBoxPrinters.Location = new Point(174, 42);
-            comboBoxPrinters.Name = "comboBoxPrinters";
-            comboBoxPrinters.Size = new Size(273, 23);
-            comboBoxPrinters.TabIndex = 1;
-            comboBoxPrinters.SelectedIndexChanged += comboBoxPrinters_SelectedIndexChanged;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(123, 45);
-            label3.Name = "label3";
-            label3.Size = new Size(45, 15);
-            label3.TabIndex = 0;
-            label3.Text = "Printer:";
+            wsTimeout.Interval = 5000;
+            wsTimeout.Tick += WsTimoutKill;
             // 
             // Form1
             // 
@@ -241,13 +316,16 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 361);
             Controls.Add(tabControl1);
+            ForeColor = SystemColors.ControlText;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
             MaximizeBox = false;
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "FWCPrintApp";
             FormClosing += Form1_FormClosing;
+            KeyDown += Form1_KeyDown;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
@@ -256,6 +334,12 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxImage).EndInit();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBoxDbg.ResumeLayout(false);
+            groupBoxDbg.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -279,5 +363,11 @@
         private Button buttonPrint;
         private System.Drawing.Printing.PrintDocument printDocument;
         private Button buttonReregisterProtocol;
+        private System.Windows.Forms.Timer wsTimeout;
+        private GroupBox groupBoxDbg;
+        private GroupBox groupBox3;
+        private CheckBox checkBoxAllowEnterPrint;
+        private GroupBox groupBox4;
+        private CheckBox checkBoxWsTimeout;
     }
 }
