@@ -41,6 +41,9 @@
             pictureBoxImage = new PictureBox();
             tabPage2 = new TabPage();
             groupBox4 = new GroupBox();
+            groupBoxDbg2 = new GroupBox();
+            label5 = new Label();
+            textBoxPrintRectOffset = new TextBox();
             checkBoxAllowEnterPrint = new CheckBox();
             groupBox3 = new GroupBox();
             comboBoxPrinters = new ComboBox();
@@ -48,6 +51,7 @@
             label4 = new Label();
             comboBoxPaperSize = new ComboBox();
             groupBoxDbg = new GroupBox();
+            checkBoxCloseAfterPrint = new CheckBox();
             checkBoxWsTimeout = new CheckBox();
             buttonReset = new Button();
             buttonReregisterProtocol = new Button();
@@ -61,6 +65,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxImage).BeginInit();
             tabPage2.SuspendLayout();
             groupBox4.SuspendLayout();
+            groupBoxDbg2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBoxDbg.SuspendLayout();
             SuspendLayout();
@@ -174,6 +179,7 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(groupBoxDbg2);
             groupBox4.Controls.Add(checkBoxAllowEnterPrint);
             groupBox4.Location = new Point(6, 100);
             groupBox4.Name = "groupBox4";
@@ -181,6 +187,35 @@
             groupBox4.TabIndex = 10;
             groupBox4.TabStop = false;
             groupBox4.Text = "App Settings";
+            // 
+            // groupBoxDbg2
+            // 
+            groupBoxDbg2.Controls.Add(label5);
+            groupBoxDbg2.Controls.Add(textBoxPrintRectOffset);
+            groupBoxDbg2.Location = new Point(355, 15);
+            groupBoxDbg2.Name = "groupBoxDbg2";
+            groupBoxDbg2.Size = new Size(200, 135);
+            groupBoxDbg2.TabIndex = 9;
+            groupBoxDbg2.TabStop = false;
+            groupBoxDbg2.Text = "Debugging";
+            groupBoxDbg2.Visible = false;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(6, 25);
+            label5.Name = "label5";
+            label5.Size = new Size(90, 15);
+            label5.TabIndex = 1;
+            label5.Text = "PrintRectOffset:";
+            // 
+            // textBoxPrintRectOffset
+            // 
+            textBoxPrintRectOffset.Location = new Point(115, 22);
+            textBoxPrintRectOffset.Name = "textBoxPrintRectOffset";
+            textBoxPrintRectOffset.Size = new Size(79, 23);
+            textBoxPrintRectOffset.TabIndex = 0;
+            textBoxPrintRectOffset.Text = "-15;-5";
             // 
             // checkBoxAllowEnterPrint
             // 
@@ -250,16 +285,30 @@
             // 
             // groupBoxDbg
             // 
+            groupBoxDbg.Controls.Add(checkBoxCloseAfterPrint);
             groupBoxDbg.Controls.Add(checkBoxWsTimeout);
             groupBoxDbg.Controls.Add(buttonReset);
             groupBoxDbg.Controls.Add(buttonReregisterProtocol);
             groupBoxDbg.Location = new Point(6, 262);
             groupBoxDbg.Name = "groupBoxDbg";
-            groupBoxDbg.Size = new Size(428, 55);
+            groupBoxDbg.Size = new Size(496, 55);
             groupBoxDbg.TabIndex = 7;
             groupBoxDbg.TabStop = false;
             groupBoxDbg.Text = "Debugging";
             groupBoxDbg.Visible = false;
+            // 
+            // checkBoxCloseAfterPrint
+            // 
+            checkBoxCloseAfterPrint.AutoSize = true;
+            checkBoxCloseAfterPrint.Checked = true;
+            checkBoxCloseAfterPrint.CheckState = CheckState.Checked;
+            checkBoxCloseAfterPrint.Location = new Point(368, 24);
+            checkBoxCloseAfterPrint.Name = "checkBoxCloseAfterPrint";
+            checkBoxCloseAfterPrint.Size = new Size(106, 19);
+            checkBoxCloseAfterPrint.TabIndex = 8;
+            checkBoxCloseAfterPrint.Text = "CloseAfterPrint";
+            checkBoxCloseAfterPrint.UseVisualStyleBackColor = true;
+            checkBoxCloseAfterPrint.CheckedChanged += checkBoxCloseAfterPrint_CheckedChanged;
             // 
             // checkBoxWsTimeout
             // 
@@ -335,6 +384,8 @@
             tabPage2.PerformLayout();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
+            groupBoxDbg2.ResumeLayout(false);
+            groupBoxDbg2.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBoxDbg.ResumeLayout(false);
@@ -368,5 +419,9 @@
         private GroupBox groupBox4;
         private CheckBox checkBoxWsTimeout;
         private System.Windows.Forms.Timer wsTimeout;
+        private GroupBox groupBoxDbg2;
+        private Label label5;
+        private TextBox textBoxPrintRectOffset;
+        private CheckBox checkBoxCloseAfterPrint;
     }
 }

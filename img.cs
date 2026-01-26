@@ -75,7 +75,6 @@ namespace FwcPrintApp
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             // Draw image with new width and height
             g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
             g.Dispose();

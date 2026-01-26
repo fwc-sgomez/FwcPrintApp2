@@ -29,7 +29,7 @@ namespace FwcPrintApp
 
             try
             {
-                HttpListenerContext context = await listener.GetContextAsync().WaitAsync(cts.Token);
+                HttpListenerContext context = await listener.GetContextAsync().WaitAsync(checkBoxWsTimeout.Checked ? cts.Token : CancellationToken.None);
                 if (context.Request.IsWebSocketRequest)
                 {
                     HttpListenerWebSocketContext wsContext = await context.AcceptWebSocketAsync(null);

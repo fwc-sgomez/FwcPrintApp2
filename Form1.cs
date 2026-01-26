@@ -29,13 +29,12 @@ namespace FwcPrintApp
                 //wsTimeout.Start();
 
             }
-
-
         }
         private void LoadSettings()
         {
             checkBoxAllowEnterPrint.Checked = Properties.Settings.Default.allowEnterPrint;
             checkBoxWsTimeout.Checked = Properties.Settings.Default.wsTimeout;
+            checkBoxCloseAfterPrint.Checked = Properties.Settings.Default.closeAfterPrint;
         }
 
         private void comboBoxPrinters_SelectedIndexChanged(object sender, EventArgs e)
@@ -73,29 +72,35 @@ namespace FwcPrintApp
 
         private void StartPrinting()
         {
-            printDocument.PrintPage += (sender, e) =>
+            string[] pt = textBoxPrintRectOffset.Text.Split(";"); // the entire print op revolves around you... no pressure.
+            try
             {
-                Rectangle r = e.PageBounds;
-                r.Location = new Point(-15, -5);
-                e.Graphics.DrawImage(printImg, r);
-                //e.Graphics.DrawImage(printImg, p);
-            };
-            printDocument.PrinterSettings.Copies = (short)numericCopies.Value;
-            printDocument.DefaultPageSettings.Landscape = true;
-            printDocument.EndPrint += (sender, e) =>
+                int offsetX = int.Parse(pt[0]);
+                int offsetY = int.Parse(pt[1]);
+                printDocument.PrintPage += (sender, e) =>
+                {
+                    Rectangle r = e.PageBounds;
+                    r.Location = new Point(-15, -5);
+                    e.Graphics.DrawImage(printImg, r);
+                    //e.Graphics.DrawImage(printImg, p);
+                };
+                printDocument.PrinterSettings.Copies = (short)numericCopies.Value;
+                printDocument.DefaultPageSettings.Landscape = true;
+                printDocument.EndPrint += (sender, e) =>
+                {
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        MessageBox.Show("Sent to printer!", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (checkBoxCloseAfterPrint.Checked) this.Close();
+                    }));
+                };
+
+                printDocument.Print();
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show("Sent to printer!", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
-            };
-
-            printDocument.Print();
-        }
-
-        private void WsTimoutKill(object sender, EventArgs e)
-        {
-            //killWs();
-            wsTimeout.Stop();
-            MessageBox.Show("No data recieved after 5 seconds. Please close this window and try again.", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("debug option PrintRectOffset is not formatted correctly. must be 2 integers, separated with a semicolon (\";\") in the middle. (default value: -15;-5)\nerror:" + ex);
+            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -126,6 +131,14 @@ namespace FwcPrintApp
         private void labelVersion_Click(object sender, EventArgs e)
         {
             groupBoxDbg.Visible = true;
+            groupBoxDbg2.Visible = true;
+            
+        }
+
+        private void checkBoxCloseAfterPrint_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.closeAfterPrint = checkBoxCloseAfterPrint.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 
