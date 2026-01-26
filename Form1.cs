@@ -21,12 +21,12 @@ namespace FwcPrintApp
             Thread threadPrinting = new Thread(InitPrintersAndPaperSizes);
             threadPrinting.Start();
 
-            Thread threadWs = new Thread(StartWsServer);
+            Thread threadWs = new Thread(StartWebSocketServer);
             threadWs.Start();
 
             if (checkBoxWsTimeout.Checked)
             {
-                wsTimeout.Start();
+                //wsTimeout.Start();
 
             }
 
@@ -57,7 +57,7 @@ namespace FwcPrintApp
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            killWs();
+            // nothin
         }
 
         private void buttonReregisterProtocol_Click(object sender, EventArgs e)
@@ -93,7 +93,7 @@ namespace FwcPrintApp
 
         private void WsTimoutKill(object sender, EventArgs e)
         {
-            killWs();
+            //killWs();
             wsTimeout.Stop();
             MessageBox.Show("No data recieved after 5 seconds. Please close this window and try again.", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }

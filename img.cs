@@ -3,7 +3,7 @@ using ImageMagick;
 
 namespace FwcPrintApp
 {
-    public partial class Form1 : Form
+    public partial class Form1
     {
         Image printImg;
 
@@ -44,16 +44,6 @@ namespace FwcPrintApp
             {
                 string imgBase64 = imgWHeader[1];
                 Base64ToWebp(imgBase64);
-                //return;
-                //byte[] bytes = Convert.FromBase64String(imgBase64);
-
-                //using (MemoryStream ms = new MemoryStream(bytes))
-                //{
-                //    printImg = Image.FromStream(ms);
-                //}
-
-                // TESTING vvv PROBABLY NOT GOOD
-                // pp stands for PostProcess........
                 Size ppSize = new Size(printImg.Width, printImg.Height);
                 Size previewSize = new Size(pictureBoxImage.Width, pictureBoxImage.Height);
                 Size test = new Size(1130, 600);
@@ -61,7 +51,6 @@ namespace FwcPrintApp
                 printImg = pi;
 
                 pictureBoxImage.Image = ScaleImageForPreview(printImg, previewSize);
-                killWs();
             }
         }
 

@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace FwcPrintApp
 {
-    public partial class Form1 : Form
+    public partial class Form1
     {
         private readonly string protocolName = "fwcpa";
         private void RegisterProtocol(bool force)

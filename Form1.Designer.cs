@@ -308,7 +308,6 @@
             // wsTimeout
             // 
             wsTimeout.Interval = 5000;
-            wsTimeout.Tick += WsTimoutKill;
             // 
             // Form1
             // 
@@ -363,11 +362,11 @@
         private Button buttonPrint;
         private System.Drawing.Printing.PrintDocument printDocument;
         private Button buttonReregisterProtocol;
-        private System.Windows.Forms.Timer wsTimeout;
         private GroupBox groupBoxDbg;
         private GroupBox groupBox3;
         private CheckBox checkBoxAllowEnterPrint;
         private GroupBox groupBox4;
         private CheckBox checkBoxWsTimeout;
+        private System.Windows.Forms.Timer wsTimeout;
     }
 }

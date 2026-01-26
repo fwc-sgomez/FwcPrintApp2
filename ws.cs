@@ -6,146 +6,83 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
-/*
- * modified version of code provided by mozilla.org
- * https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_server
- */
-
-/*
- * BUG: messages larger than 65000 are lost or something idk
- * 
- */
+using System.Net.WebSockets;
 
 namespace FwcPrintApp
 {
-    public partial class Form1 : Form
+    public partial class Form1
     {
-        private TcpListener server;
-        private TcpClient client;
-        private NetworkStream stream;
-        private bool runWs = true;
-        public void StartWsServer()
+        /*
+        * im entering my vibecoding era
+        */
+
+        public string StoredBase64 { get; private set; } = string.Empty;
+
+        private async void StartWebSocketServer()
         {
-            string ip = "127.0.0.1";
-            int port = 21845;
-            server = new TcpListener(IPAddress.Parse(ip), port);
-            server.Start();
+            HttpListener listener = new HttpListener();
+            listener.Prefixes.Add("http://127.0.0.1:21845/");
+            listener.Start();
+
+            // Create a cancellation token that expires after 5 seconds
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
             try
             {
-                client = server.AcceptTcpClient();
+                HttpListenerContext context = await listener.GetContextAsync().WaitAsync(cts.Token);
+                if (context.Request.IsWebSocketRequest)
+                {
+                    HttpListenerWebSocketContext wsContext = await context.AcceptWebSocketAsync(null);
+                    WebSocket webSocket = wsContext.WebSocket;
 
-                stream = client.GetStream();
-            } catch {
-                /*
-                 * the meaning of life isn't as clear as the contrast between black and white.
-                 * we're set on earth for many reasons. some more important than others.
-                 * for some, it's helping others. for others, it's it's helping themselves.
-                 * as for me? it's killing threads victorian style but in 2025 where Thread.Abort() isn't allowed.
-                 */
+                    // Use a MemoryStream to accumulate chunks of the message
+                    using var ms = new MemoryStream();
+                    byte[] buffer = new byte[4096]; // Standard chunk size
+                    WebSocketReceiveResult result;
+
+                    do
+                    {
+                        // Receive a single fragment/chunk
+                        result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                        // Write the chunk into the MemoryStream
+                        ms.Write(buffer, 0, result.Count);
+
+                        // Continue until the client signals the end of the message
+                    } while (!result.EndOfMessage);
+                    //MessageBox.Show("hello");
+                    // Convert the full accumulated stream to a string
+                    ms.Seek(0, SeekOrigin.Begin);
+                    using (var reader = new StreamReader(ms, Encoding.UTF8))
+                    {
+                        StoredBase64 = await reader.ReadToEndAsync();
+                    }
+
+                    ImageFromBase64(StoredBase64);
+
+                    // Close connection safely
+                    await webSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Received", CancellationToken.None);
+                    webSocket.Dispose();
+                }
             }
-
-
-            // enter to an infinite cycle to be able to handle every change in stream
-            // I don't really like how much cpu this takes. need to either optimize or end thread once image is recieved...
-            while (runWs)
+            catch (OperationCanceledException)
             {
-                handleWs();
+                // This blocks triggers when the 5-second timer hits
+                this.Invoke(() => MessageBox.Show("WebSocket server timed out due to inactivity."));
+            }
+            catch (Exception ex)
+            {
+                this.Invoke(() => MessageBox.Show($"Error: {ex.Message}"));
+            }
+            finally
+            {
+                listener.Stop();
+                listener.Close();
             }
         }
-        
-        public void killWs()
-        {
-            runWs = false;
-            wsTimeout.Stop();
-            server.Stop();
-        }
 
-        private void handleWs()
-        {
-            while (!stream.DataAvailable) ;
-            while (client.Available < 3) ; // match against "get"
-
-            byte[] bytes = new byte[client.Available];
-            stream.Read(bytes, 0, bytes.Length);
-            string s = Encoding.UTF8.GetString(bytes);
-
-            if (Regex.IsMatch(s, "^GET", RegexOptions.IgnoreCase))
-            {
-                handleHandshake(s);
-            }
-            else
-            {
-                handleMessage(bytes);
-            }
-        }
-
-        private void handleHandshake(string s)
-        {
-            // 1. Obtain the value of the "Sec-WebSocket-Key" request header without any leading or trailing whitespace
-            // 2. Concatenate it with "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" (a special GUID specified by RFC 6455)
-            // 3. Compute SHA-1 and Base64 hash of the new value
-            // 4. Write the hash back as the value of "Sec-WebSocket-Accept" response header in an HTTP response
-            string swk = Regex.Match(s, "Sec-WebSocket-Key: (.*)").Groups[1].Value.Trim();
-            string swkAndSalt = swk + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-            byte[] swkAndSaltSha1 = System.Security.Cryptography.SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(swkAndSalt));
-            string swkAndSaltSha1Base64 = Convert.ToBase64String(swkAndSaltSha1);
-
-            // HTTP/1.1 defines the sequence CR LF as the end-of-line marker
-            byte[] response = Encoding.UTF8.GetBytes(
-                "HTTP/1.1 101 Switching Protocols\r\n" +
-                "Connection: Upgrade\r\n" +
-                "Upgrade: websocket\r\n" +
-                "Sec-WebSocket-Accept: " + swkAndSaltSha1Base64 + "\r\n\r\n");
-
-            stream.Write(response, 0, response.Length);
-        }
-
-        private void handleMessage(byte[] bytes)
-        {
-            bool fin = (bytes[0] & 0b10000000) != 0,
-                    mask = (bytes[1] & 0b10000000) != 0; // must be true, "All messages from the client to the server have this bit set"
-            int opcode = bytes[0] & 0b00001111; // expecting 1 - text message
-            ulong offset = 2,
-                  msgLen = bytes[1] & (ulong)0b01111111;
-
-            if (msgLen == 126)
-            {
-                // bytes are reversed because websocket will print them in Big-Endian, whereas
-                // BitConverter will want them arranged in little-endian on windows
-                msgLen = BitConverter.ToUInt16(new byte[] { bytes[3], bytes[2] }, 0);
-                offset = 4;
-            }
-            else if (msgLen == 127)
-            {
-                // To test the below code, we need to manually buffer larger messages — since the NIC's autobuffering
-                // may be too latency-friendly for this code to run (that is, we may have only some of the bytes in this
-                // websocket frame available through client.Available).
-                msgLen = BitConverter.ToUInt64(new byte[] { bytes[9], bytes[8], bytes[7], bytes[6], bytes[5], bytes[4], bytes[3], bytes[2] }, 0);
-                offset = 10;
-            }
-
-            if (msgLen == 0)
-            {
-                MessageBox.Show("something happened...", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else if (mask)
-            {
-                byte[] decoded = new byte[msgLen];
-                byte[] masks = new byte[4] { bytes[offset], bytes[offset + 1], bytes[offset + 2], bytes[offset + 3] };
-                offset += 4;
-
-                for (ulong i = 0; i < msgLen; ++i)
-                    decoded[i] = (byte)(bytes[offset + i] ^ masks[i % 4]);
-
-                string text = Encoding.UTF8.GetString(decoded);
-                ImageFromBase64(text);
-            }
-            else
-            {
-                // mask bit not set
-                MessageBox.Show("Recieve error...", "FWCPrintApp", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        /*
+        * im leaving my vibecoding era
+        */
     }
 }
