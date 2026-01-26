@@ -58,6 +58,8 @@
             labelVersion = new Label();
             printDocument = new System.Drawing.Printing.PrintDocument();
             wsTimeout = new System.Windows.Forms.Timer(components);
+            label6 = new Label();
+            labelActivePS = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericCopies).BeginInit();
@@ -190,6 +192,8 @@
             // 
             // groupBoxDbg2
             // 
+            groupBoxDbg2.Controls.Add(labelActivePS);
+            groupBoxDbg2.Controls.Add(label6);
             groupBoxDbg2.Controls.Add(label5);
             groupBoxDbg2.Controls.Add(textBoxPrintRectOffset);
             groupBoxDbg2.Location = new Point(355, 15);
@@ -358,6 +362,24 @@
             // 
             wsTimeout.Interval = 5000;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(6, 117);
+            label6.Name = "label6";
+            label6.Size = new Size(56, 15);
+            label6.TabIndex = 2;
+            label6.Text = "ActivePS:";
+            // 
+            // labelActivePS
+            // 
+            labelActivePS.AutoSize = true;
+            labelActivePS.Location = new Point(68, 117);
+            labelActivePS.Name = "labelActivePS";
+            labelActivePS.Size = new Size(38, 15);
+            labelActivePS.TabIndex = 3;
+            labelActivePS.Text = "label7";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -423,5 +445,7 @@
         private Label label5;
         private TextBox textBoxPrintRectOffset;
         private CheckBox checkBoxCloseAfterPrint;
+        private Label labelActivePS;
+        private Label label6;
     }
 }

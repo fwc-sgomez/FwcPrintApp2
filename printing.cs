@@ -125,6 +125,7 @@ namespace FwcPrintApp
                 idx++;
             }
             paperSizesListFinishedInit = true;
+            SaveSelectedPaper(activePaperSize.PaperName);
         }
 
         public void SaveSelectedPaper(string name)
@@ -137,7 +138,23 @@ namespace FwcPrintApp
                 Properties.Settings.Default.selectedPaperSize = name;
                 Properties.Settings.Default.Save();
             }
+            PaperSize aps = PaperNameToPaperSize(name);
+            activePaperSize = aps;
             printDocument.DefaultPageSettings.PaperSize = activePaperSize;
+            labelActivePS.Text = activePaperSize.PaperName;
+        }
+
+        public PaperSize PaperNameToPaperSize(string paperName)
+        {
+            PaperSize psReturn = new PaperSize();
+            foreach (PaperSize paperSize in paperSizes)
+            {
+                if (paperSize.PaperName == paperName)
+                {
+                    psReturn = paperSize;
+                }
+            }
+            return psReturn;
         }
     }
 }
