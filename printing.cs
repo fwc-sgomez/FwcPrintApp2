@@ -141,7 +141,11 @@ namespace FwcPrintApp
             PaperSize aps = PaperNameToPaperSize(name);
             activePaperSize = aps;
             printDocument.DefaultPageSettings.PaperSize = activePaperSize;
-            labelActivePS.Text = activePaperSize.PaperName;
+            labelActivePS.Invoke(() =>
+            {
+                labelActivePS.Text = activePaperSize.PaperName;
+
+            });
         }
 
         public PaperSize PaperNameToPaperSize(string paperName)
