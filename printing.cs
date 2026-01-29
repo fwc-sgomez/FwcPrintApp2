@@ -101,29 +101,61 @@ namespace FwcPrintApp
         public PaperSize activePaperSize;
         public void LoadDefaultPaper()
         {
-            string sizeString = Properties.Settings.Default.selectedPaperSize;
-            bool usingSelected = true;
-            if (sizeString.Length < 1)
-            {
-                sizeString = printDocument.PrinterSettings.DefaultPageSettings.PaperSize.PaperName;
-                usingSelected = false;
-            }
-
+            string savedPaperString = Properties.Settings.Default.selectedPaperSize;
             int idx = 0;
-            foreach (PaperSize paperSize in paperSizes)
+            PaperSize ps99014 = new("undefined", 0, 0);
+            int ps99014Idx = 0;
+            PaperSize psIdx0 = new("undefined", 0, 0);
+            PaperSize psRestore = new("undefined", 0, 0);
+            int psRestoreIdx = 0;
+
+            foreach (PaperSize ps in paperSizes) 
             {
-                if (sizeString == paperSize.PaperName)
+                if (ps.PaperName.Contains("99014"))
                 {
-                    comboBoxPaperSize.Invoke(cb => cb.SelectedIndex = idx);
-                    activePaperSize = paperSize;
-                } else if (paperSize.PaperName.Contains("99014") && !usingSelected)
+                    // find 99014
+                    if (ps.PaperName.Contains("Shipping"))
+                    {
+                        // try to save "99014 shipping"
+                        ps99014 = ps;
+                        ps99014Idx = idx;
+                    } if (ps.PaperName.Length < 1)
+                    {
+                        // save any other 99014 if shipping does not exist
+                        ps99014 = ps;
+                        ps99014Idx = idx;
+                    }
+                } else if (ps.PaperName == savedPaperString)
                 {
-                    comboBoxPaperSize.Invoke(cb => cb.SelectedIndex = idx);
-                    activePaperSize = paperSize;
+                    // try to find papersize to restore from
+                    psRestore = ps;
+                    psRestoreIdx = idx;
                 }
 
+                // save papersize at index 0, just in case?
+                if (idx == 0)
+                {
+                    psIdx0 = ps;
+                }
                 idx++;
             }
+
+            // could be simplified by moving into for-loop, however, this made the most sense for me at this time
+            // prioritizing saved papersize -> ps99014 -> papersize @ idx 0 as last resort
+            if (psRestore.PaperName != "undefined")
+            {
+                activePaperSize = psRestore;
+                comboBoxPaperSize.Invoke(cb => cb.SelectedIndex = psRestoreIdx);
+            } else if (ps99014.PaperName != "undefined")
+            {
+                activePaperSize = ps99014;
+                comboBoxPaperSize.Invoke(cb => cb.SelectedIndex = ps99014Idx);
+            } else
+            {
+                activePaperSize = psIdx0;
+                comboBoxPaperSize.Invoke(cb => cb.SelectedIndex = 0);
+            }
+
             paperSizesListFinishedInit = true;
             SaveSelectedPaper(activePaperSize.PaperName);
         }
