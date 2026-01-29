@@ -64,8 +64,8 @@ namespace FwcPrintApp
             double nPercentW = 0;
             double nPercentH = 0;
             // Calculate width and height with new desired size
-            nPercentW = (resize.Width / sourceWidth);
-            nPercentH = (resize.Height / sourceHeight);
+            nPercentW = ((double)resize.Width / (double)sourceWidth);
+            nPercentH = ((double)resize.Height / (double)sourceHeight);
             nPercent = Math.Min(nPercentW, nPercentH);
             // New Width and Height
             int destWidth = (int)(sourceWidth * nPercent);

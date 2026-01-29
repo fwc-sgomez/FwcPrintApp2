@@ -68,7 +68,7 @@ namespace FwcPrintApp
             catch (OperationCanceledException)
             {
                 // This blocks triggers when the 5-second timer hits
-                this.Invoke(() => MessageBox.Show("WebSocket server timed out due to inactivity."));
+                this.Invoke(() => MessageBox.Show("No data recieved after 5 seconds. Please try to reprint."));
             }
             catch (Exception ex)
             {
