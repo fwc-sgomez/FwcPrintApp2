@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.Reflection;
+using AutoUpdaterDotNET;
 
 /*
  * Form1.cs
@@ -29,6 +30,9 @@ namespace FwcPrintApp
                 //wsTimeout.Start();
 
             }
+            AutoUpdater.Mandatory = false;
+            AutoUpdater.RunUpdateAsAdmin = false;
+            AutoUpdater.Start("https://raw.githubusercontent.com/fwc-sgomez/shhh/refs/heads/main/fwcpaau.xml");
         }
         private void LoadSettings()
         {
